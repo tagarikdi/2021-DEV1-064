@@ -76,6 +76,24 @@ public class BoardServiceImpl implements BoardService{
         boxes.get(String.format("%d%d", row, col)).accept(Box.valueOf(player));
     }
 
+    /**
+     * Check if a given box is Blank.
+     *
+     * @param board Board
+     * @param col int
+     * @param row int
+     * @return true if the given box is Blank.
+     */
+    private boolean isBoxBlank(Board board, int col, int row) {
+        Map<String, Box> boxs = Map.of(
+                "00", board.getTopLeft(), "01", board.getTopCenter(), "02", board.getTopRight(),
+                "10", board.getCenterLeft(), "11", board.getCenter(), "12", board.getCenterRight(),
+                "20", board.getBottomLeft(), "21", board.getBottomCenter(), "22", board.getBottomRight()
+        );
+
+        return boxs.get(String.format("%d%d", row, col)) == Box.BLANK;
+    }
+
     @Override
     public BoardDTO play(RoundDTO roundDTO) {
         Optional<Board> boardById = boardRepository.findById(UUID.fromString(roundDTO.getId()));
@@ -95,6 +113,11 @@ public class BoardServiceImpl implements BoardService{
         // Check if the game is end.
         if (board.isEndBoard()) {
             throw new IllegalArgumentException(String.format("The game is end and the winner was: %s", getWinner(board)));
+        }
+
+        // Check if the asked box is blank.
+        if (!isBoxBlank(boardById.get(), roundDTO.getCol(), roundDTO.getRow())) {
+            throw new IllegalArgumentException(String.format("The asked box is not Blank row = %s, col = %s ", roundDTO.getRow(), roundDTO.getCol()));
         }
 
         updateBox(board, roundDTO.getPlayer(), roundDTO.getRow(), roundDTO.getCol());
