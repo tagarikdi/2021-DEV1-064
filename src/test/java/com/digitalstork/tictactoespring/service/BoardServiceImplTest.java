@@ -1,6 +1,7 @@
 package com.digitalstork.tictactoespring.service;
 
 import com.digitalstork.tictactoespring.dto.BoardDTO;
+import com.digitalstork.tictactoespring.dto.RoundDTO;
 import com.digitalstork.tictactoespring.model.Board;
 import com.digitalstork.tictactoespring.model.enumeration.Box;
 import com.digitalstork.tictactoespring.repository.BoardRepository;
@@ -12,9 +13,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static junit.framework.TestCase.*;
+import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -44,6 +48,34 @@ public class BoardServiceImplTest {
         assertNotNull(boardDTO.getId());
         assertFalse(boardDTO.isEndBoard());
         assertEquals("X can start the game", boardDTO.getNextPlayer());
+    }
+
+    @Test
+    public void should_throw_IllegalArgumentException_when_first_player_is_not_X() {
+        // Given
+        UUID uuid = UUID.randomUUID();
+        RoundDTO roundDTO = RoundDTO.builder()
+                .id(uuid.toString())
+                .player("O")
+                .build();
+
+        Optional<Board> gameById = Optional.of(new Board().toBuilder()
+                .id(uuid)
+                .nextPlayer(Box.O)
+                .topLeft(Box.BLANK)
+                .build());
+
+        // When
+        when(boardRepository.findById(any())).thenReturn(gameById);
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> boardServiceImpl.play(roundDTO)
+        );
+
+        // Then
+        assertEquals("The first player should be: X", exception.getMessage());
+
     }
 
 }
