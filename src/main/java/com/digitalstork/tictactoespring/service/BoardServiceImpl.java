@@ -61,6 +61,10 @@ public class BoardServiceImpl implements BoardService{
             throw new IllegalArgumentException("The first player should be: " + Box.X);
         }
 
+        if (!board.getNextPlayer().getValue().equals(roundDTO.getPlayer())) {
+            throw new IllegalArgumentException("The next player should be: " + board.getNextPlayer());
+        }
+
         updateBox(board, roundDTO.getPlayer(), roundDTO.getRow(), roundDTO.getCol());
 
         Box nextPlayer = Box.O.getValue().equals(roundDTO.getPlayer()) ? Box.X : Box.O;
