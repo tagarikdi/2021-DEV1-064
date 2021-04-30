@@ -1,10 +1,10 @@
 # Tic Tac Toe Game
-Proposed solution of Tic Tac Toe Game with Spring Boot &amp; Test Unit
+Proposed solution of Tic Tac Toe Game with Spring Boot &amp; Unit Test
 
 
 ## Description
 
-This project is a proposed solution for TicTacToe Game challenge with Java, Spring boot, JPA, H2 and TTD with JUnit & Mockito
+This project is a proposed solution for TicTacToe Game challenge with Java, Spring boot, JPA, H2 and TDD with JUnit & Mockito
 
 ## Rules
 
@@ -24,7 +24,7 @@ This project is a proposed solution for TicTacToe Game challenge with Java, Spri
 
 ## Stack used
 
-The technologies used is Example is :
+The technologies used in Example are :
 
 - JDK 11
 - Spring boot
@@ -37,7 +37,7 @@ The technologies used is Example is :
 
 ## Running the application locally
 
-There are several ways to run a Spring Boot application on your local machine. One way is to execute the `main` method in the `com.digitalstork.tictactoe.TictactoeApplication` class from your IDE.
+There are several ways to run a Spring Boot application on your local machine. One way is to execute the `main` method in the `com.digitalstork.tictactoespring.TictactoespringApplication` class from your IDE.
 
 Alternatively you can use the [Spring Boot Maven plugin](https://docs.spring.io/spring-boot/docs/current/reference/html/build-tool-plugins-maven-plugin.html) like so:
 
@@ -53,7 +53,7 @@ Our example contains two end points:
 
 You execute the first end point ([localhost:8080/api/tictactoe/new](http://localhost:8080/api/tictactoe/new)) which will generate an id which allows you to play the game in the second end point ([localhost:8080/api/tictactoe/play](http://localhost:8080/api/tictactoe/play)) we give the name of the player (X or O), X is play the first time, and the values (between 0 and 2) of each row and column of our matrix (3X3)
 
-Note: for the second end point which had a POST method, we must introduce the data in Body-> raw-> JSON:
+Note: for the second endpoint which had a POST method, we must introduce the data in Body-> raw-> JSON:
 
 json
 {
