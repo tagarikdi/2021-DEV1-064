@@ -132,4 +132,34 @@ public class BoardServiceImplTest {
         assertEquals("The game is end and the winner was: No one", exception.getMessage());
     }
 
+    @Test
+    public void should_throw_IllegalArgumentException_when_box_isNotBlank() {
+
+        // Given
+        UUID uuid = UUID.randomUUID();
+        RoundDTO roundDTO = RoundDTO.builder()
+                .id(uuid.toString())
+                .player("O")
+                .col(0)
+                .row(0)
+                .build();
+
+        Board gameById = new Board().toBuilder()
+                .id(uuid)
+                .topLeft(Box.O)
+                .nextPlayer(Box.O)
+                .endBoard(false)
+                .build();
+
+        // When
+        when(boardRepository.findById(any())).thenReturn(Optional.of(gameById));
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> boardServiceImpl.play(roundDTO)
+        );
+
+        // Then
+        assertEquals("The asked box is not Blank row = 0, col = 0 ", exception.getMessage());
+    }
+
 }
