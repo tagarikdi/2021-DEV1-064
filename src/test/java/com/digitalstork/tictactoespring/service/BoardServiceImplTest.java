@@ -78,4 +78,31 @@ public class BoardServiceImplTest {
 
     }
 
+    @Test
+    public void should_throw_IllegalArgumentException_when_round_player_name_not_equal_nextPlayer() {
+
+        // Given
+        UUID uuid = UUID.randomUUID();
+        RoundDTO roundDTO = RoundDTO.builder()
+                .id(uuid.toString())
+                .player("X")
+                .build();
+
+        Board gameById = Board.builder()
+                .id(uuid)
+                .nextPlayer(Box.O)
+                .build();
+
+        // When
+        when(boardRepository.findById(any())).thenReturn(Optional.of(gameById));
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> boardServiceImpl.play(roundDTO)
+        );
+
+        // Then
+        assertEquals("The next player should be: O", exception.getMessage());
+    }
+
 }
