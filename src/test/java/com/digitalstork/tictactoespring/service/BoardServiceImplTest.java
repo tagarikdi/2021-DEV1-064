@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Optional;
@@ -19,6 +20,7 @@ import java.util.UUID;
 import static junit.framework.TestCase.*;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -430,6 +432,74 @@ public class BoardServiceImplTest {
 
         // Then
         assertEquals("The game is end and the winner was: O", exception.getMessage());
+    }
+
+    @Test
+    public void should_return_BoardDTO_with_isWinner_true() {
+
+        // Given
+        UUID uuid = UUID.randomUUID();
+        RoundDTO roundDTO = RoundDTO.builder()
+                .id(uuid.toString())
+                .player("O")
+                .row(0)
+                .col(2)
+                .build();
+
+        Optional<Board> gameById = Optional.of(new Board().toBuilder()
+                .id(uuid)
+                .nextPlayer(Box.O)
+                .topLeft(Box.O)
+                .topCenter(Box.O)
+                .build());
+
+        // When
+        when(boardRepository.findById(any())).thenReturn(gameById);
+        when(boardRepository.save(any())).thenReturn(Mockito.mock(Board.class));
+        BoardDTO response = boardServiceImpl.play(roundDTO);
+
+        // Then
+        assertNotNull(response);
+        assertNotNull(response.getId());
+        assertEquals("X Player", response.getNextPlayer());
+        assertTrue(response.isEndBoard());
+    }
+
+    @Test
+    public void should_return_BoardDTO_with_isBoardDTOTie_true() {
+
+        // Given
+        UUID uuid = UUID.randomUUID();
+        RoundDTO roundDTO = RoundDTO.builder()
+                .id(uuid.toString())
+                .player("O")
+                .row(1)
+                .col(1)
+                .build();
+
+        Optional<Board> gameById = Optional.of(new Board().toBuilder()
+                .id(uuid)
+                .nextPlayer(Box.O)
+                .topLeft(Box.O)
+                .topCenter(Box.X)
+                .topRight(Box.O)
+                .centerLeft(Box.O)
+                .centerRight(Box.X)
+                .bottomLeft(Box.X)
+                .bottomCenter(Box.O)
+                .bottomRight(Box.X)
+                .build());
+
+        // When
+        when(boardRepository.findById(any())).thenReturn(gameById);
+        when(boardRepository.save(any())).thenReturn(Mockito.mock(Board.class));
+        BoardDTO response = boardServiceImpl.play(roundDTO);
+
+        // Then
+        assertNotNull(response);
+        assertNotNull(response.getId());
+        assertEquals("X Player", response.getNextPlayer());
+        assertTrue(response.isEndBoard());
     }
 
 }
