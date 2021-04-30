@@ -32,7 +32,13 @@ public class BoardRessource {
     @PostMapping("/play")
     public ResponseEntity<BoardDTO> playGame(@RequestBody RoundDTO round) {
 
-
-        return ResponseEntity.ok(new BoardDTO());
+        LOG.info("Play game {}", round);
+        if (round.getCol() < 0 || round.getCol() > 2 || round.getRow() < 0 || round.getRow() > 2) {
+            throw new IllegalArgumentException("Wrong row or column information, they should be between 0 and 2!");
+        }
+        if (!"X".equals(round.getPlayer()) && !"O".equals(round.getPlayer())) {
+            throw new IllegalArgumentException("Wrong player name, it should be X or O.");
+        }
+        return ResponseEntity.ok(boardService.play(round));
     }
 }
