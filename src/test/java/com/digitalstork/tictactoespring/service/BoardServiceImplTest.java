@@ -105,4 +105,31 @@ public class BoardServiceImplTest {
         assertEquals("The next player should be: O", exception.getMessage());
     }
 
+    @Test
+    public void should_throw_IllegalArgumentException_when_the_game_is_end() {
+
+        // Given
+        UUID uuid = UUID.randomUUID();
+        RoundDTO roundDTO = RoundDTO.builder()
+                .id(uuid.toString())
+                .player("X")
+                .build();
+
+        Board gameById = new Board().toBuilder()
+                .id(uuid)
+                .nextPlayer(Box.X)
+                .endBoard(true)
+                .build();
+
+        // When
+        when(boardRepository.findById(any())).thenReturn(Optional.of(gameById));
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> boardServiceImpl.play(roundDTO)
+        );
+
+        // Then
+        assertEquals("The game is end and the winner was: No one", exception.getMessage());
+    }
+
 }
