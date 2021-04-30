@@ -162,4 +162,274 @@ public class BoardServiceImplTest {
         assertEquals("The asked box is not Blank row = 0, col = 0 ", exception.getMessage());
     }
 
+    @Test
+    public void should_throw_IllegalArgumentException_when_the_game_is_end_and_winner_is_O_with_any_case() {
+
+        // Given
+        UUID uuid = UUID.randomUUID();
+        RoundDTO roundDTO = RoundDTO.builder()
+                .id(uuid.toString())
+                .player("O")
+                .build();
+
+        Board gameById = new Board().toBuilder()
+                .id(uuid)
+                .nextPlayer(Box.O)
+                .topLeft(Box.O)
+                .topCenter(Box.O)
+                .topRight(Box.O)
+                .endBoard(true)
+                .build();
+
+        // When
+        when(boardRepository.findById(any())).thenReturn(Optional.of(gameById));
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> boardServiceImpl.play(roundDTO)
+        );
+
+        // Then
+        assertEquals("The game is end and the winner was: O", exception.getMessage());
+    }
+
+    @Test
+    public void should_throw_IllegalArgumentException_when_the_game_is_end_and_winner_is_X_with_any_case() {
+
+        // Given
+        UUID uuid = UUID.randomUUID();
+        RoundDTO roundDTO = RoundDTO.builder()
+                .id(uuid.toString())
+                .player("X")
+                .build();
+
+        Board gameById = new Board().toBuilder()
+                .id(uuid)
+                .nextPlayer(Box.X)
+                .topLeft(Box.O)
+                .topCenter(Box.O)
+                .topRight(Box.O)
+                .endBoard(true)
+                .build();
+
+        // When
+        when(boardRepository.findById(any())).thenReturn(Optional.of(gameById));
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> boardServiceImpl.play(roundDTO)
+        );
+
+        // Then
+        assertEquals("The game is end and the winner was: O", exception.getMessage());
+    }
+
+    @Test
+    public void should_throw_IllegalArgumentException_when_the_game_is_end_and_match_case_10_11_12() {
+
+        // Given
+        UUID uuid = UUID.randomUUID();
+        RoundDTO roundDTO = RoundDTO.builder()
+                .id(uuid.toString())
+                .player("X")
+                .build();
+
+        Board gameById = new Board().toBuilder()
+                .id(uuid)
+                .nextPlayer(Box.X)
+                .centerLeft(Box.O)
+                .center(Box.O)
+                .centerRight(Box.O)
+                .endBoard(true)
+                .build();
+
+        // When
+        when(boardRepository.findById(any())).thenReturn(Optional.of(gameById));
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> boardServiceImpl.play(roundDTO)
+        );
+
+        // Then
+        assertEquals("The game is end and the winner was: O", exception.getMessage());
+    }
+
+    @Test
+    public void should_throw_IllegalArgumentException_when_the_game_is_end_and_match_case_20_21_22() {
+
+        // Given
+        UUID uuid = UUID.randomUUID();
+        RoundDTO roundDTO = RoundDTO.builder()
+                .id(uuid.toString())
+                .player("X")
+                .build();
+
+        Board gameById = new Board().toBuilder()
+                .id(uuid)
+                .nextPlayer(Box.X)
+                .bottomLeft(Box.O)
+                .bottomCenter(Box.O)
+                .bottomRight(Box.O)
+                .endBoard(true)
+                .build();
+
+        // When
+        when(boardRepository.findById(any())).thenReturn(Optional.of(gameById));
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> boardServiceImpl.play(roundDTO)
+        );
+
+        // Then
+        assertEquals("The game is end and the winner was: O", exception.getMessage());
+    }
+
+    @Test
+    public void should_throw_IllegalArgumentException_when_the_game_is_end_and_match_case_00_10_20() {
+
+        // Given
+        UUID uuid = UUID.randomUUID();
+        RoundDTO roundDTO = RoundDTO.builder()
+                .id(uuid.toString())
+                .player("X")
+                .build();
+
+        Board gameById = new Board().toBuilder()
+                .id(uuid)
+                .nextPlayer(Box.X)
+                .topLeft(Box.O)
+                .centerLeft(Box.O)
+                .bottomLeft(Box.O)
+                .endBoard(true)
+                .build();
+
+        // When
+        when(boardRepository.findById(any())).thenReturn(Optional.of(gameById));
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> boardServiceImpl.play(roundDTO)
+        );
+
+        // Then
+        assertEquals("The game is end and the winner was: O", exception.getMessage());
+    }
+
+    @Test
+    public void should_throw_IllegalArgumentException_when_the_game_is_end_and_match_case_01_11_21() {
+
+        // Given
+        UUID uuid = UUID.randomUUID();
+        RoundDTO roundDTO = RoundDTO.builder()
+                .id(uuid.toString())
+                .player("X")
+                .build();
+
+        Board gameById = new Board().toBuilder()
+                .id(uuid)
+                .nextPlayer(Box.X)
+                .topCenter(Box.O)
+                .center(Box.O)
+                .bottomCenter(Box.O)
+                .endBoard(true)
+                .build();
+
+        // When
+        when(boardRepository.findById(any())).thenReturn(Optional.of(gameById));
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> boardServiceImpl.play(roundDTO)
+        );
+
+        // Then
+        assertEquals("The game is end and the winner was: O", exception.getMessage());
+    }
+
+    @Test
+    public void should_throw_IllegalArgumentException_when_the_game_is_end_and_match_case_02_12_22() {
+
+        // Given
+        UUID uuid = UUID.randomUUID();
+        RoundDTO roundDTO = RoundDTO.builder()
+                .id(uuid.toString())
+                .player("X")
+                .build();
+
+        Board gameById = new Board().toBuilder()
+                .id(uuid)
+                .nextPlayer(Box.X)
+                .topRight(Box.O)
+                .centerRight(Box.O)
+                .bottomRight(Box.O)
+                .endBoard(true)
+                .build();
+
+        // When
+        when(boardRepository.findById(any())).thenReturn(Optional.of(gameById));
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> boardServiceImpl.play(roundDTO)
+        );
+
+        // Then
+        assertEquals("The game is end and the winner was: O", exception.getMessage());
+    }
+
+    @Test
+    public void should_throw_IllegalArgumentException_when_the_game_is_end_and_match_case_00_11_22() {
+
+        // Given
+        UUID uuid = UUID.randomUUID();
+        RoundDTO roundDTO = RoundDTO.builder()
+                .id(uuid.toString())
+                .player("X")
+                .build();
+
+        Board gameById = new Board().toBuilder()
+                .id(uuid)
+                .nextPlayer(Box.X)
+                .topLeft(Box.O)
+                .center(Box.O)
+                .bottomRight(Box.O)
+                .endBoard(true)
+                .build();
+
+        // When
+        when(boardRepository.findById(any())).thenReturn(Optional.of(gameById));
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> boardServiceImpl.play(roundDTO)
+        );
+
+        // Then
+        assertEquals("The game is end and the winner was: O", exception.getMessage());
+    }
+
+    @Test
+    public void should_throw_IllegalArgumentException_when_the_game_is_end_and_match_case_02_11_20() {
+
+        // Given
+        UUID uuid = UUID.randomUUID();
+        RoundDTO roundDTO = RoundDTO.builder()
+                .id(uuid.toString())
+                .player("X")
+                .build();
+
+        Board gameById = new Board().toBuilder()
+                .id(uuid)
+                .nextPlayer(Box.X)
+                .topRight(Box.O)
+                .center(Box.O)
+                .bottomLeft(Box.O)
+                .endBoard(true)
+                .build();
+
+        // When
+        when(boardRepository.findById(any())).thenReturn(Optional.of(gameById));
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> boardServiceImpl.play(roundDTO)
+        );
+
+        // Then
+        assertEquals("The game is end and the winner was: O", exception.getMessage());
+    }
+
 }
