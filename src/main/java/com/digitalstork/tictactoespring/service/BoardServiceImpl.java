@@ -9,10 +9,7 @@ import com.digitalstork.tictactoespring.repository.BoardRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class BoardServiceImpl implements BoardService{
@@ -21,6 +18,12 @@ public class BoardServiceImpl implements BoardService{
     private BoardRepository boardRepository;
     private static final Logger LOG = LoggerFactory.getLogger(BoardServiceImpl.class);
     private static final BoardMapper BOARD_MAPPER = new BoardMapper();
+
+    private static final List<List<String>> WINNER_COMBINATIONS = Arrays.asList(
+            Arrays.asList("00", "01", "02"), Arrays.asList("10", "11", "12"), Arrays.asList("20", "21", "22"),
+            Arrays.asList("00", "10", "20"), Arrays.asList("01", "11", "21"), Arrays.asList("02", "12", "22"),
+            Arrays.asList("00", "11", "22"), Arrays.asList("02", "11", "20")
+    );
 
 
     @Override
@@ -37,6 +40,30 @@ public class BoardServiceImpl implements BoardService{
                 board.getBottomLeft(), board.getBottomCenter(), board.getBottomRight()
         );
         return boxes.stream().allMatch(b -> b == Box.BLANK);
+    }
+
+    /**
+     * @param board Board
+     * @return the name of the winner, if there are no winner then return 'No one'.
+     */
+    private String getWinner(Board board) {
+        if (isWinnerByName(board, Box.O)) {
+            return Box.O.getValue();
+        }
+        if (isWinnerByName(board, Box.X)) {
+            return Box.X.getValue();
+        }
+        return "No one";
+    }
+
+    private boolean isWinnerByName(Board board, Box player) {
+        Map<String, Box> boxes = Map.of(
+                "00", board.getTopLeft(), "01", board.getTopCenter(), "02", board.getTopRight(),
+                "10", board.getCenterLeft(), "11", board.getCenter(), "12", board.getCenterRight(),
+                "20", board.getBottomLeft(), "21", board.getBottomCenter(), "22", board.getBottomRight()
+        );
+        return WINNER_COMBINATIONS.stream()
+                .anyMatch(combination -> combination.stream().allMatch(b -> boxes.get(b) == player));
     }
 
     private void updateBox(Board board, String player, int row, int col) {
@@ -63,6 +90,11 @@ public class BoardServiceImpl implements BoardService{
 
         if (!board.getNextPlayer().getValue().equals(roundDTO.getPlayer())) {
             throw new IllegalArgumentException("The next player should be: " + board.getNextPlayer());
+        }
+
+        // Check if the game is end.
+        if (board.isEndBoard()) {
+            throw new IllegalArgumentException(String.format("The game is end and the winner was: %s", getWinner(board)));
         }
 
         updateBox(board, roundDTO.getPlayer(), roundDTO.getRow(), roundDTO.getCol());
