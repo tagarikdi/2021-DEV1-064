@@ -27,6 +27,9 @@ public class BoardServiceImpl implements BoardService{
             Arrays.asList("00", "11", "22"), Arrays.asList("02", "11", "20")
     );
 
+    public BoardServiceImpl(BoardRepository boardRepository) {
+        this.boardRepository = boardRepository;
+    }
 
     @Override
     public BoardDTO createBoard() {
@@ -127,7 +130,7 @@ public class BoardServiceImpl implements BoardService{
             throw new IllegalArgumentException("The first player should be: " + Box.X);
         }
 
-        if (!board.getNextPlayer().getValue().equals(roundDTO.getPlayer())) {
+        if (board.getNextPlayer() != Box.BLANK && !board.getNextPlayer().getValue().equals(roundDTO.getPlayer())) {
             throw new IllegalArgumentException("The next player should be: " + board.getNextPlayer());
         }
 
