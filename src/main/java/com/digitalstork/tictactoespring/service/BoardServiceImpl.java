@@ -8,10 +8,12 @@ import com.digitalstork.tictactoespring.model.enumeration.Box;
 import com.digitalstork.tictactoespring.repository.BoardRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.function.Consumer;
 
+@Service
 public class BoardServiceImpl implements BoardService{
 
 
