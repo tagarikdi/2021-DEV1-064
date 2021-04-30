@@ -1,13 +1,12 @@
 package com.digitalstork.tictactoespring.web.rest;
 
 import com.digitalstork.tictactoespring.dto.BoardDTO;
+import com.digitalstork.tictactoespring.dto.RoundDTO;
 import com.digitalstork.tictactoespring.service.BoardService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/tictactoe")
@@ -28,5 +27,12 @@ public class BoardRessource {
         LOG.info("Game Id: {}\n", board.getId());
 
         return ResponseEntity.ok(board);
+    }
+
+    @PostMapping("/play")
+    public ResponseEntity<BoardDTO> playGame(@RequestBody RoundDTO round) {
+
+
+        return ResponseEntity.ok(new BoardDTO());
     }
 }
