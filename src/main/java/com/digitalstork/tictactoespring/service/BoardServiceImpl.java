@@ -94,6 +94,25 @@ public class BoardServiceImpl implements BoardService{
         return boxs.get(String.format("%d%d", row, col)) == Box.BLANK;
     }
 
+    private boolean isWinner(Board board) {
+        return isWinnerByName(board, Box.O) || isWinnerByName(board, Box.X);
+    }
+
+    /**
+     * Check if there are an empty box.
+     *
+     * @param board Board
+     * @return true if all boxes are full.
+     */
+    private boolean isGameTie(Board board) {
+        List<Box> boxes = List.of(
+                board.getTopLeft(), board.getTopCenter(), board.getTopRight(),
+                board.getCenterLeft(), board.getCenter(), board.getCenterRight(),
+                board.getBottomLeft(), board.getBottomCenter(), board.getBottomRight()
+        );
+        return boxes.stream().allMatch(b -> b != Box.BLANK);
+    }
+
     @Override
     public BoardDTO play(RoundDTO roundDTO) {
         Optional<Board> boardById = boardRepository.findById(UUID.fromString(roundDTO.getId()));
@@ -124,6 +143,11 @@ public class BoardServiceImpl implements BoardService{
 
         Box nextPlayer = Box.O.getValue().equals(roundDTO.getPlayer()) ? Box.X : Box.O;
         board.setNextPlayer(nextPlayer);
+
+        if (isWinner(board) || isGameTie(board)) {
+            board.setEndBoard(true);
+            LOG.info("The winner is: {}", getWinner(board));
+        }
 
         this.boardRepository.save(board);
 
